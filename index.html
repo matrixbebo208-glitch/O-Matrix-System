@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O-System | نظام تصنيف البيانات الذكي</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>O-System <span class="badge">النسخة الذكية</span></h1>
+            <p>صنف بياناتك، وزع ملفاتك، وأرسل عبر الواتساب بضغطة زر.</p>
+        </header>
+
+        <div class="trial-banner" id="trial-banner">
+            متبقي لك محاولات تجريبية: <span id="attempts-count">{{ attempts }}</span> من 5
+        </div>
+
+        <main class="main-card">
+            <div class="upload-area" id="drop-zone">
+                <input type="file" id="fileInput" multiple hidden>
+                <div class="icon">📁</div>
+                <p>اسحب الملفات هنا أو اضغط للاختيار</p>
+            </div>
+
+            <div class="rules-config">
+                <h3>إعدادات التصنيف</h3>
+                <div class="input-group">
+                    <label>ابحث عن أرقام تبدأ بـ:</label>
+                    <input type="text" id="phone-prefix" placeholder="مثال: +20">
+                </div>
+                <div class="input-group">
+                    <label>اسم المجلد أو الملف الناتج:</label>
+                    <input type="text" id="folder-name" placeholder="مثال: عملاء_مصر">
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="startProcessing()">بدء المعالجة والتوزيع</button>
+        </main>
+
+        <div id="admin-modal" class="modal">
+            <div class="modal-content">
+                <h2>لوحة الإدارة - تفعيل الاشتراكات</h2>
+                <div class="input-group">
+                    <input type="text" id="admin-target-id" placeholder="أدخل ID المشترك">
+                </div>
+                <div class="input-group">
+                    <select id="admin-plan">
+                        <option value="monthly">اشتراك شهري (50 ج.م)</option>
+                        <option value="yearly">اشتراك سنوي (510 ج.م - خصم 15%)</option>
+                    </select>
+                </div>
+                <button class="btn-success" onclick="confirmActivation()">تفعيل الآن</button>
+                <button class="btn-close" onclick="closeAdminModal()">إغلاق</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 جميع الحقوق محفوظة لـ O-System</p>
+            <p class="version" onclick="handleVersionClick()">{{ version }}</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
