@@ -1,116 +1,121 @@
-// O-System | Logic & Administration Client-side
+// O-Matrix-System | Serverless Intelligence Engine
+
+// إعداد المحاولات عند أول دخول
+if (!localStorage.getItem('matrix_trials')) {
+    localStorage.setItem('matrix_trials', '5');
+}
+
+// تحديث العداد في الواجهة
+const updateCounter = () => {
+    const trials = localStorage.getItem('matrix_trials');
+    document.getElementById('attempts-count').innerText = trials;
+    
+    // إذا انتهت المحاولات، نظهر خانة الـ ID ونغير لون العداد
+    if (parseInt(trials) <= 0) {
+        document.getElementById('trial-banner').style.borderColor = '#f85149';
+        document.getElementById('trial-banner').style.color = '#f85149';
+        document.getElementById('id-input-section').style.display = 'block';
+        document.getElementById('process-btn').innerText = "تفعيل النسخة الكاملة للمتابعة";
+    }
+};
+
+updateCounter();
 
 let clickCount = 0;
+const ADMIN_KEY = "01224815487";
 
-// 1. وظيفة تتبع الضغطات الثلاث لفتح لوحة الأدمن الخفية
+// 1. منطق الضغطات الثلاث (Easter Egg)
 function handleVersionClick() {
     clickCount++;
-    
-    // إعادة تصفير العداد لو الضغطات كانت بطيئة جداً (أكثر من 2 ثانية)
-    setTimeout(() => { clickCount = 0; }, 2000);
+    setTimeout(() => { clickCount = 0; }, 2000); // تصفير العداد بعد ثانيتين
 
     if (clickCount === 3) {
         clickCount = 0;
-        const password = prompt("نظام O-System: برجاء إدخال رمز الوصول الإداري:");
-        
-        if (password === "01224815487") {
+        const pass = prompt("O-Matrix Access: أدخل رمز الإدارة");
+        if (pass === ADMIN_KEY) {
             document.getElementById('admin-modal').style.display = 'flex';
-        } else if (password !== null) {
-            alert("عذراً، الرمز غير صحيح. لا تملك صلاحية الوصول.");
+        } else {
+            alert("صلاحية مرفوضة!");
         }
     }
 }
 
-// 2. إغلاق لوحة الأدمن
 function closeAdminModal() {
     document.getElementById('admin-modal').style.display = 'none';
 }
 
-// 3. تفعيل الاشتراك من لوحة الأدمن (يرسل البيانات للـ app.py)
+// 2. تفعيل ID المشترك
 function confirmActivation() {
-    const targetId = document.getElementById('admin-target-id').value;
-    const plan = document.getElementById('admin-plan').value;
+    const newId = document.getElementById('admin-target-id').value;
+    if (!newId) return alert("أدخل ID أولاً");
 
-    if (!targetId) {
-        alert("برجاء إدخال ID المشترك أولاً");
+    // حفظ الـ ID في "قائمة المفعلين" (محلياً للمتصفح الحالي)
+    localStorage.setItem('active_license', newId);
+    alert("تم تفعيل الـ ID بنجاح على هذا الجهاز.");
+    location.reload(); // إعادة تحميل لتحديث الحالة
+}
+
+// 3. المحرك الرئيسي لمعالجة الملفات
+function startProcessing() {
+    const trials = parseInt(localStorage.getItem('matrix_trials'));
+    const license = localStorage.getItem('active_license');
+    const prefix = document.getElementById('phone-prefix').value;
+
+    // حالة 1: وجود اشتراك مفعل
+    if (license) {
+        processLogic(prefix, "اشتراك مدفوع");
         return;
     }
 
-    const formData = new FormData();
-    formData.append('password', '01224815487'); // الباسورد المطلوب للتفعيل
-    formData.append('target_id', targetId);
-    formData.append('plan', plan);
-
-    fetch('/admin/activate', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert(data.msg);
-            closeAdminModal();
+    // حالة 2: استخدام المحاولات المجانية
+    if (trials > 0) {
+        const nextTrials = trials - 1;
+        localStorage.setItem('matrix_trials', nextTrials.toString());
+        updateCounter();
+        processLogic(prefix, `تجربة مجانية (متبقي ${nextTrials})`);
+    } else {
+        // حالة 3: انتهاء المحاولات
+        const userIdInput = document.getElementById('user-id-input').value;
+        if (!userIdInput) {
+            alert("انتهت محاولاتك! تواصل مع الأدمن للحصول على ID التفعيل بـ 50ج.");
+            window.open(`https://wa.me/201224815487?text=أريد شراء ID تفعيل لسيستم O-Matrix`, "_blank");
         } else {
-            alert(data.msg);
+            alert("هذا الـ ID غير مسجل في قاعدة البيانات الحالية.");
         }
-    });
-}
-
-// 4. منطق معالجة الملفات والتحقق من المحاولات الـ 5
-function startProcessing() {
-    const prefix = document.getElementById('phone-prefix').value;
-    const folder = document.getElementById('folder-name').value;
-    
-    // في حالة التجربة، نرسل طلباً للسيرفر لخصم محاولة
-    const formData = new FormData();
-    // يمكنك إضافة ID المستخدم هنا لو كان مسجلاً دخول
-    
-    fetch('/process', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'trial') {
-            document.getElementById('attempts-count').innerText = data.remaining;
-            alert("تمت المعالجة بنجاح! متبقي لك " + data.remaining + " محاولات مجانية.");
-            // هنا تضع كود فتح الواتساب اليدوي
-            openWhatsApp(prefix);
-        } else if (data.status === 'limit') {
-            alert(data.msg);
-            // توجيه المستخدم للواتساب الخاص بك للاشتراك
-            window.open("https://wa.me/201224815487?text=أريد تفعيل اشتراك O-System", "_blank");
-        } else if (data.status === 'success') {
-            alert(data.msg);
-            openWhatsApp(prefix);
-        }
-    });
-}
-
-// 5. وظيفة فتح الواتساب يدوياً (WhatsApp Link Generator)
-function openWhatsApp(prefix) {
-    if (prefix) {
-        const msg = encodeURIComponent("مرحباً، تم تصنيف الملفات بناءً على الكود: " + prefix);
-        // هذا مجرد مثال، يمكنك تعديله ليفتح رقم العميل المكتشف
-        console.log("تجهيز رابط الواتساب...");
     }
 }
 
-// 6. التعامل مع Drag & Drop في الواجهة
+// 4. منطق التصنيف الفعلي (محاكاة)
+function processLogic(prefix, status) {
+    if (!prefix) return alert("برجاء إدخال كود الدولة أولاً (مثلاً +20)");
+    
+    alert(`جاري معالجة الملفات بنظام ${status}...`);
+    
+    // محاكاة فتح الواتساب يدوياً
+    setTimeout(() => {
+        const whatsappMsg = encodeURIComponent(`تم استخراج وتصنيف البيانات بنجاح بكود: ${prefix}`);
+        window.open(`https://wa.me/?text=${whatsappMsg}`, "_blank");
+    }, 1500);
+}
+
+// التعامل مع رفع الملفات (Drag & Drop)
 const dropZone = document.getElementById('drop-zone');
-dropZone.onclick = () => document.getElementById('fileInput').click();
+const fileInput = document.getElementById('fileInput');
 
-dropZone.ondragover = (e) => {
-    e.preventDefault();
-    dropZone.style.borderColor = "#25d366";
-};
+dropZone.onclick = () => fileInput.click();
 
-dropZone.ondragleave = () => {
-    dropZone.style.borderColor = "#475569";
-};
+fileInput.onchange = (e) => handleFiles(e.target.files);
 
+dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = "#25d366"; };
+dropZone.ondragleave = () => { dropZone.style.borderColor = "#30363d"; };
 dropZone.ondrop = (e) => {
     e.preventDefault();
-    const files = e.dataTransfer.files;
-    alert("تم استقبال " + files.length + " ملفات. جاهز للمعالجة.");
+    handleFiles(e.dataTransfer.files);
 };
+
+function handleFiles(files) {
+    if (files.length > 0) {
+        document.getElementById('upload-text').innerText = `تم اختيار ${files.length} ملفات`;
+        document.getElementById('file-list').innerText = Array.from(files).map(f => f.name).join(', ');
+    }
+}
