@@ -1,0 +1,147 @@
+/* التصميم العام للسيستم - O-System Modern Theme */
+:root {
+    --primary: #25d366; /* لون واتساب */
+    --bg: #0f172a;      /* خلفية داكنة احترافية */
+    --card: #1e293b;    /* لون الكروت */
+    --text: #f8fafc;
+    --accent: #38bdf8;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+}
+
+.badge {
+    font-size: 0.8rem;
+    background: var(--primary);
+    padding: 3px 10px;
+    border-radius: 20px;
+    vertical-align: middle;
+}
+
+/* عداد المحاولات */
+.trial-banner {
+    background: #f59e0b;
+    color: #000;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+/* منطقة الرفع */
+.main-card {
+    background: var(--card);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.upload-area {
+    border: 2px dashed #475569;
+    padding: 40px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.upload-area:hover {
+    border-color: var(--primary);
+    background: rgba(37, 211, 102, 0.05);
+}
+
+.upload-area .icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+/* المدخلات والقواعد */
+.rules-config {
+    margin: 25px 0;
+    text-align: right;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+/* لوحة الأدمن الخفية */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--card);
+    padding: 30px;
+    border-radius: 20px;
+    width: 350px;
+}
+
+.btn-success { background: #10b981; color: #fff; border: none; padding: 10px; width: 100%; margin-top: 10px; border-radius: 5px; cursor: pointer; }
+.btn-close { background: #ef4444; color: #fff; border: none; padding: 10px; width: 100%; margin-top: 5px; border-radius: 5px; cursor: pointer; }
+
+/* الفوتر */
+footer {
+    margin-top: 30px;
+    opacity: 0.6;
+    font-size: 0.8rem;
+}
+
+.version {
+    cursor: pointer;
+    user-select: none; /* يمنع التظليل عند الضغط المتكرر */
+    display: inline-block;
+    padding: 5px;
+}
