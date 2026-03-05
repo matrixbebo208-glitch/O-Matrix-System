@@ -1,10 +1,12 @@
-/* التصميم العام للسيستم - O-System Modern Theme */
+/* O-Matrix-System Professional Style */
 :root {
-    --primary: #25d366; /* لون واتساب */
-    --bg: #0f172a;      /* خلفية داكنة احترافية */
-    --card: #1e293b;    /* لون الكروت */
-    --text: #f8fafc;
-    --accent: #38bdf8;
+    --primary: #25d366; /* أخضر واتساب */
+    --bg: #0b0f19;      /* أسود ملكي */
+    --card: #161b22;    /* رمادي غامق للكروت */
+    --text: #e6edf3;
+    --accent: #58a6ff;
+    --danger: #f85149;
+    --warning: #d29922;
 }
 
 body {
@@ -16,51 +18,63 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 20px;
 }
 
 .container {
-    width: 90%;
-    max-width: 600px;
+    width: 100%;
+    max-width: 500px;
+}
+
+header {
+    margin-bottom: 30px;
     text-align: center;
 }
 
 header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 5px;
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 10px;
 }
 
 .badge {
-    font-size: 0.8rem;
     background: var(--primary);
-    padding: 3px 10px;
-    border-radius: 20px;
+    color: #000;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
     vertical-align: middle;
 }
 
 /* عداد المحاولات */
 .trial-banner {
-    background: #f59e0b;
-    color: #000;
-    padding: 10px;
-    border-radius: 8px;
-    margin: 20px 0;
+    background: rgba(210, 153, 34, 0.15);
+    border: 1px solid var(--warning);
+    color: var(--warning);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
     font-weight: bold;
 }
 
-/* منطقة الرفع */
+/* الكارت الرئيسي */
 .main-card {
     background: var(--card);
-    padding: 30px;
+    padding: 25px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #30363d;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
 
 .upload-area {
-    border: 2px dashed #475569;
-    padding: 40px;
+    border: 2px dashed #30363d;
+    padding: 40px 20px;
     border-radius: 15px;
     cursor: pointer;
     transition: 0.3s;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .upload-area:hover {
@@ -69,14 +83,21 @@ header h1 {
 }
 
 .upload-area .icon {
-    font-size: 3rem;
+    font-size: 2.5rem;
+    display: block;
     margin-bottom: 10px;
 }
 
-/* المدخلات والقواعد */
+/* الإعدادات */
 .rules-config {
-    margin: 25px 0;
     text-align: right;
+    margin-bottom: 20px;
+}
+
+.rules-config h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--accent);
 }
 
 .input-group {
@@ -85,63 +106,87 @@ header h1 {
 
 label {
     display: block;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    color: #8b949e;
 }
 
 input, select {
     width: 100%;
     padding: 12px;
+    background: #0d1117;
+    border: 1px solid #30363d;
     border-radius: 8px;
-    border: 1px solid #475569;
-    background: #0f172a;
     color: #fff;
+    font-family: 'Cairo', sans-serif;
     box-sizing: border-box;
 }
 
-.btn-primary {
-    background: var(--primary);
-    color: #000;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1.1rem;
+input:focus {
+    border-color: var(--accent);
+    outline: none;
 }
 
-/* لوحة الأدمن الخفية */
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: var(--primary);
+    border: none;
+    border-radius: 10px;
+    color: #000;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+}
+
+/* المودال (اللوحة الخفية) */
 .modal {
     display: none;
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    backdrop-filter: blur(5px);
 }
 
 .modal-content {
     background: var(--card);
-    padding: 30px;
+    width: 90%;
+    max-width: 350px;
+    padding: 25px;
     border-radius: 20px;
-    width: 350px;
+    border: 1px solid var(--accent);
+    text-align: center;
 }
 
-.btn-success { background: #10b981; color: #fff; border: none; padding: 10px; width: 100%; margin-top: 10px; border-radius: 5px; cursor: pointer; }
-.btn-close { background: #ef4444; color: #fff; border: none; padding: 10px; width: 100%; margin-top: 5px; border-radius: 5px; cursor: pointer; }
+.btn-success { background: var(--accent); color: #fff; border:none; padding:12px; width:100%; border-radius:8px; margin-top:10px; cursor:pointer; font-weight: bold; }
+.btn-close { background: transparent; color: var(--danger); border:1px solid var(--danger); padding:10px; width:100%; border-radius:8px; margin-top:10px; cursor:pointer; }
 
 /* الفوتر */
 footer {
     margin-top: 30px;
-    opacity: 0.6;
-    font-size: 0.8rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #8b949e;
 }
 
 .version {
+    margin-top: 10px;
     cursor: pointer;
-    user-select: none; /* يمنع التظليل عند الضغط المتكرر */
     display: inline-block;
-    padding: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.version:hover {
+    color: var(--primary);
 }
